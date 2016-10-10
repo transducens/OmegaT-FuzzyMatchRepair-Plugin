@@ -129,12 +129,12 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
                 
                 if(!interrput){
                     SortedSet<ScoredSuggestion> tmp_suggestions;
-                    if(marker.getMenu().GetRankingRakingByMeanOverlapping().isSelected())
-                        tmp_suggestions = RankingSuggestions.OverlappingFirstLengthSecondRanker(sprime, sourceseg, targetseg, notsuggestions);
+                    if(marker.getMenu().GetRankingByMeanLengthSource().isSelected())
+                        tmp_suggestions = RankingSuggestions.SourceContext(sprime, sourceseg, targetseg, notsuggestions);
                     else if (marker.getMenu().GetRankingByFMSProportion().isSelected())
                         tmp_suggestions = RankingSuggestions.EditedWordsRanker(sprime, sourceseg, targetseg, notsuggestions);
                     else
-                        tmp_suggestions = RankingSuggestions.MeanLengthRanker(sprime, sourceseg, targetseg, notsuggestions);
+                        tmp_suggestions = RankingSuggestions.TargetContext(sprime, sourceseg, targetseg, notsuggestions);
                     //SortedSet<ScoredSuggestion> tmp_suggestions = RankingSuggestions.OverlappingRanker(sprime, sourceseg, targetseg, notsuggestions);
                     for(ScoredSuggestion s: tmp_suggestions){
                         suggestions.add(new SuggestionWithEditingInfo(s.getScore(), targetseg, s));

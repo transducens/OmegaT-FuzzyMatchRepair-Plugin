@@ -109,8 +109,9 @@ public class FuzzyMatchRepairMenu {
     
     private final JMenu ranking_options_menu;
     //private final JRadioButton ranking_options;
-    private final JRadioButtonMenuItem ranking_by_mean_length;
-    private final JRadioButtonMenuItem ranking_by_mean_overlapping;
+    private final JRadioButtonMenuItem ranking_by_mean_length_target;
+    private final JRadioButtonMenuItem ranking_by_mean_length_source;
+    //private final JRadioButtonMenuItem ranking_by_mean_overlapping;
     private final JRadioButtonMenuItem ranking_by_FMS_proportion;
     
     private final ButtonGroup ranking_button_group;
@@ -139,13 +140,17 @@ public class FuzzyMatchRepairMenu {
         return (Integer)max_suggestions.getValue();
     }
     
-    public JRadioButtonMenuItem GetRankingByMeanLength(){
-        return ranking_by_mean_length;
+    public JRadioButtonMenuItem GetRankingByMeanLengthSource(){
+        return ranking_by_mean_length_source;
     }
     
-    public JRadioButtonMenuItem GetRankingRakingByMeanOverlapping(){
-        return ranking_by_mean_overlapping;
+    public JRadioButtonMenuItem GetRankingByMeanLengthTarget(){
+        return ranking_by_mean_length_target;
     }
+    
+    /*public JRadioButtonMenuItem GetRankingRakingByMeanOverlapping(){
+        return ranking_by_mean_overlapping;
+    }*/
     
     public JRadioButtonMenuItem GetRankingByFMSProportion(){
         return ranking_by_FMS_proportion;
@@ -167,25 +172,30 @@ public class FuzzyMatchRepairMenu {
         replacewithfmrepairedmatch = new JMenuItem("Replace with repaired match");
         insertfmrepairedmatch = new JMenuItem("Insert repaired match");
 
-        ranking_by_mean_length = new JRadioButtonMenuItem("Patches mean length");
-        ranking_by_mean_length.addMouseListener(new MenuMouseListener(textarea));
-        ranking_by_mean_overlapping = new JRadioButtonMenuItem("Proportion of words matched in translation suggestion");
-        ranking_by_mean_overlapping.addMouseListener(new MenuMouseListener(textarea));
-        ranking_by_FMS_proportion = new JRadioButtonMenuItem("Difference between the FMS of S and T");
+        ranking_by_mean_length_source = new JRadioButtonMenuItem("Longest source patches");
+        ranking_by_mean_length_source.addMouseListener(new MenuMouseListener(textarea));
+        ranking_by_mean_length_target = new JRadioButtonMenuItem("Longest target patches");
+        ranking_by_mean_length_target.addMouseListener(new MenuMouseListener(textarea));
+        //ranking_by_mean_overlapping = new JRadioButtonMenuItem("Target context ratio");
+        //ranking_by_mean_overlapping.addMouseListener(new MenuMouseListener(textarea));
+        ranking_by_FMS_proportion = new JRadioButtonMenuItem("Source/target FMS similarity");
         ranking_by_FMS_proportion.addMouseListener(new MenuMouseListener(textarea));
         //ranking_options = new JRadioButton();
         ranking_options_menu = new JMenu("Ranking options");
-        ranking_by_mean_overlapping.setSelected(true);
-        ranking_options_menu.add(ranking_by_mean_overlapping);
-        ranking_options_menu.add(ranking_by_mean_length);
+        //ranking_by_mean_overlapping.setSelected(true);
+        //ranking_options_menu.add(ranking_by_mean_overlapping);
+        ranking_by_mean_length_source.setSelected(true);
+        ranking_options_menu.add(ranking_by_mean_length_source);
+        ranking_options_menu.add(ranking_by_mean_length_target);
         ranking_options_menu.add(ranking_by_FMS_proportion);
         
         ranking_menu_mt = new JMenu("Machine translators");
         //getOmegaTMT();
         
         ranking_button_group = new ButtonGroup();
-        ranking_button_group.add(ranking_by_mean_length);
-        ranking_button_group.add(ranking_by_mean_overlapping);
+        ranking_button_group.add(ranking_by_mean_length_source);
+        ranking_button_group.add(ranking_by_mean_length_target);
+        //ranking_button_group.add(ranking_by_mean_overlapping);
         ranking_button_group.add(ranking_by_FMS_proportion);
         
         SpinnerNumberModel spinner_model_patchsize = new SpinnerNumberModel(5, 1, 10, 1);  
@@ -197,7 +207,7 @@ public class FuzzyMatchRepairMenu {
             }
         });
         
-        patch_size_options = new JMenu("Patch size");
+        patch_size_options = new JMenu("Maximum patch size");
         patch_size_options.add(new JMenuItem().add(patch_size));
         
         SpinnerNumberModel spinner_model_maxsuggestions = new SpinnerNumberModel(6, 1, 99, 1);  
