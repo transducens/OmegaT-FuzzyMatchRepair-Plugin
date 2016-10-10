@@ -4,13 +4,20 @@ The implementation of FMR for OmegaT is named OmegaT-FuzzyMatchRepair-Plugin, an
 
 ##Guide to install the plugin
 
-This section describes a simplified step-by-step guide to install the plugins, and assumes the user is familiar with the OmegaT environment. Sections 4.2 and 4.3 describe more in-depth how to install and configure the plugins. 
-1. Use git to clone the repositories or download the zip of https://github.com/dtr5/apertium-cli-omegat and https://github.com/transducens/OmegaT-FuzzyMatchRepair-Plugin.
+This section describes a simplified step-by-step guide to install the plugins, and assumes the user is familiar with the OmegaT environment.
+
+1. Use git to clone the repositories or download the zip of https://github.com/transducens/OmegaT-FuzzyMatchRepair-Plugin.
+
 2. Optionally, use ant jar to compile the source in both cases. That will overwrite the precompiled .jar file in build/jar. 
-3. Put both OmegaT-FMRepair.jar and apertium-cli-omegat.jar found in the build/jar folder of each plugin in the plugins folder of OmegaT <config dir>/plugins. The actual location of the <config dir> can be found under the Options menu of OmegaT, using the Access Configuration Folder option.
+
+3. Put both OmegaT-FMRepair.jar found in the build/jar folder of each plugin in the plugins folder of OmegaT <config dir>/plugins. The actual location of the <config dir> can be found under the Options menu of OmegaT, using the Access Configuration Folder option.
+
 4. Put the contents of OmegaT-FuzzyMatchRepair-Plugin/lib in the same plugins folder.
-5. Open OmegaT and configure OmegaT-FuzzyMatchRepair-Plugin as explained in section 4.2.1 and apertium-cli-omegat as explained in section 4.3.1.
+
+5. Open OmegaT and configure OmegaT-FuzzyMatchRepair-Plugin as explained in the following sections.
+
 6. A collapsed panel labeled as Repaired Fuzzy Matches will appear in the bottom part of the window. This panel can be placed in any part of the main window of OmegaT to ease working with it.
+
 7. Start or load a project. Every time a match from the translation memory is selected, the plugin will try to find suggestions of possible repaired matches and will show them in this panel.
 
 ##Configuration
@@ -28,7 +35,7 @@ In order to activate the OmegaT-FuzzyMatchRepair-Plugin plugin, it is necessary 
 
 4. Maximum amount of suggestions: Maximum number of suggested repaired matches to be shown to the user. The default value for this variable is 6.
 
-5. Machine translation systems: the user can  choose the MT systems to be used with the fuzzy-match repair plugin. This is one of the most important options, given that, it is necessary to select at least one MT system to make the plugin work. Section 4.3 describes the plugin Apertium-cli-OmegaT, that allows to use a local installation of Apertium for this plugin, which is specially convenient for the cases of the languages involved in this project. It is worth noting that this list is independent of the menu for choosing systems for machine-translating the source segments. This is due to the fact that the plugin uses MT intensively, since it splits every SL segment into overlapping sub-segments of different lengths; in some cases, the user may want to prevent the plugin to use some of the MT systems, for example, when these MT systems have some sort of limitations in the number of words that can be translated.
+5. Machine translation systems: the user can  choose the MT systems to be used with the fuzzy-match repair plugin. This is one of the most important options, given that, it is necessary to select at least one MT system to make the plugin work. It is worth noting that this list is independent of the menu for choosing systems for machine-translating the source segments. This is due to the fact that the plugin uses MT intensively, since it splits every SL segment into overlapping sub-segments of different lengths; in some cases, the user may want to prevent the plugin to use some of the MT systems, for example, when these MT systems have some sort of limitations in the number of words that can be translated.
 
 ##Usage
 Once the user has configured the plugin, it will start producing repaired fuzzy matches every time a new suggestion from the TM is selected. This entry will be split and translated with the active MT systems in the configuration menu, and the resulting repaired fuzzy-matches will be shown in the panel of the plugin with visual information about the changes made in the original match. As can be seen in the following capture, words deleted will be marked in green, while words added will be shown in green.
