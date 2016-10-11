@@ -34,7 +34,7 @@ public class OmegaTTokenizer implements FMRTokenizer{
         for(int i=0;i<tokens.length;i++){
             String word=s.substring(tokens[i].getOffset(),
                     tokens[i].getOffset()+tokens[i].getLength());
-            if(!word.matches("\\s")){
+            if(!word.matches("\\s+")){
                 if(w!=null)
                     w.add(new Word(word));
                 tokenlist.add(new SegmentToken(tokens[i].getOffset(), tokens[i].getLength()));

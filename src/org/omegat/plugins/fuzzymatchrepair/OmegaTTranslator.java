@@ -152,7 +152,7 @@ public class OmegaTTranslator implements GenericTranslator{
                         }
                     } catch (IllegalArgumentException | NoSuchMethodException | SecurityException |
                             IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace(System.err);
+                        //e.printStackTrace(System.err);
                         StringBuilder sb = new StringBuilder();
                         for(String s: inputset){
                             sb.append(s);
