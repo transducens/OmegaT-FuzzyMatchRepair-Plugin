@@ -34,6 +34,8 @@ public class FuzzyMatchRepairMarker implements IMarker{
     /** Last match found (if the index is negative means NULL). */
     private static int former_match=-2;
     
+    private static String entry;
+    
     static private FuzzyMatchRepairTextArea fmr_text_area;
     
     private FuzzyMatchRepairMenu menu;
@@ -58,15 +60,16 @@ public class FuzzyMatchRepairMarker implements IMarker{
                 matcher.getDocument().addDocumentListener(new DocumentListener(){
                     //When a change is registered, if the active match changed,
                     //the recommendations are re-computed
-                    public void changedUpdate(DocumentEvent e) {
+                    synchronized public void changedUpdate(DocumentEvent e) {
                         int activeMatch=getActiveMatchIndex();
                         if(Core.getMatcher().getActiveMatch() != null){
-                            //if(former_match!=activeMatch){
-                                former_match=activeMatch;
+                            if(former_match!=activeMatch || !entry.equals(Core.getEditor().getCurrentEntry().getSrcText())){
+                                entry = Core.getEditor().getCurrentEntry().getSrcText();
+                                former_match = activeMatch;
                                 synchronized(getFMRepairsTextArea()){
                                     getFMRepairsTextArea().startSearchThread(Core.getEditor().getCurrentEntry());
                                 }
-                            //}
+                            }
                         }
                     }
 
