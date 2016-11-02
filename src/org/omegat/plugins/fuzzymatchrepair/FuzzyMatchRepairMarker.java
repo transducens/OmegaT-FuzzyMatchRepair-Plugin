@@ -17,6 +17,8 @@ import org.omegat.core.Core;
 import org.omegat.core.CoreEvents;
 import org.omegat.core.data.SourceTextEntry;
 import org.omegat.core.events.IApplicationEventListener;
+import org.omegat.core.events.IEntryEventListener;
+import org.omegat.gui.common.EntryInfoThreadPane;
 import org.omegat.gui.editor.Document3;
 import org.omegat.gui.editor.EditorController;
 import org.omegat.gui.editor.EditorTextArea3;
@@ -53,6 +55,18 @@ public class FuzzyMatchRepairMarker implements IMarker{
         this.menu = new FuzzyMatchRepairMenu(this.fmr_text_area, this);
         // When the application is started up, the DocumentListener for the
         // matching text area is created
+        CoreEvents.registerEntryEventListener(new IEntryEventListener() {
+
+            @Override
+            public void onNewFile(String activeFileName) {
+                fmr_text_area.clear();
+            }
+
+            @Override
+            public void onEntryActivated(SourceTextEntry newEntry) {
+                fmr_text_area.clear();
+            }
+        });
         CoreEvents.registerApplicationEventListener(new IApplicationEventListener(){
             public void onApplicationStartup() {
                 MatchesTextArea matcher=(MatchesTextArea)Core.getMatcher();
@@ -62,14 +76,10 @@ public class FuzzyMatchRepairMarker implements IMarker{
                     //the recommendations are re-computed
                     synchronized public void changedUpdate(DocumentEvent e) {
                         int activeMatch=getActiveMatchIndex();
-                        if(Core.getMatcher().getActiveMatch() != null){
-                            if(former_match!=activeMatch || !entry.equals(Core.getEditor().getCurrentEntry().getSrcText())){
-                                entry = Core.getEditor().getCurrentEntry().getSrcText();
-                                former_match = activeMatch;
-                                synchronized(getFMRepairsTextArea()){
-                                    getFMRepairsTextArea().startSearchThread(Core.getEditor().getCurrentEntry());
-                                }
-                            }
+                        entry = Core.getEditor().getCurrentEntry().getSrcText();
+                        former_match = activeMatch;
+                        synchronized(getFMRepairsTextArea()){
+                            getFMRepairsTextArea().startSearchThread(Core.getEditor().getCurrentEntry());
                         }
                     }
 

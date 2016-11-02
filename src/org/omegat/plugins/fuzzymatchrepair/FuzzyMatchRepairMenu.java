@@ -50,6 +50,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MenuKeyEvent;
+import javax.swing.event.MenuKeyListener;
 import org.omegat.core.Core;
 import org.omegat.core.CoreEvents;
 import org.omegat.core.events.IApplicationEventListener;
@@ -243,6 +245,37 @@ public class FuzzyMatchRepairMenu {
                 FuzzyMatchRepairMarker.getEditionMenu().addSeparator();
                 FuzzyMatchRepairMarker.getEditionMenu().add(replacewithfmrepairedmatch);
                 FuzzyMatchRepairMarker.getEditionMenu().add(insertfmrepairedmatch);
+                insertfmrepairedmatch.addMenuKeyListener(new MenuKeyListener() {
+
+                    @Override
+                    public void menuKeyTyped(MenuKeyEvent e) {
+                    }
+
+                    @Override
+                    public void menuKeyPressed(MenuKeyEvent e) {
+                    }
+
+                    @Override
+                    public void menuKeyReleased(MenuKeyEvent e) {
+                        fmrepair.InsertSuggestion();
+                    }
+                });
+                
+                replacewithfmrepairedmatch.addMenuKeyListener(new MenuKeyListener() {
+
+                    @Override
+                    public void menuKeyTyped(MenuKeyEvent e) {
+                    }
+
+                    @Override
+                    public void menuKeyPressed(MenuKeyEvent e) {
+                    }
+
+                    @Override
+                    public void menuKeyReleased(MenuKeyEvent e) {
+                        fmrepair.ReplaceTextBySuggestion();
+                    }
+                });
                 
                 EditorTextArea3 eta = FuzzyMatchRepairMarker.getEditorTextArea();
                 eta.addKeyListener(new KeyListener() {
@@ -266,7 +299,7 @@ public class FuzzyMatchRepairMenu {
                                 case KeyEvent.VK_8: fmrepair.setActiveSuggestion(7); break;
                                 case KeyEvent.VK_9: fmrepair.setActiveSuggestion(8); break;
                                 case KeyEvent.VK_R: fmrepair.ReplaceTextBySuggestion(); break;
-                                case KeyEvent.VK_I: fmrepair.ReplaceTextBySuggestion(); break;
+                                case KeyEvent.VK_I: fmrepair.InsertSuggestion(); break;
                             }
                         }
                     }

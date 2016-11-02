@@ -122,20 +122,24 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
     protected void startSearchThread(SourceTextEntry newEntry) {
         NearString match = Core.getMatcher().getActiveMatch();
 
-        if(match!=null && !match.translation.equals(last_tm_target)){
-            last_entry = newEntry.getSrcText();
-            last_tm_target = Core.getMatcher().getActiveMatch().translation;
+        if(match == null || match.translation == null)
+            clear();
+        else{
+            if(!match.translation.equals(last_tm_target)){
+                last_entry = newEntry.getSrcText();
+                last_tm_target = match.translation;
 
-            if (last_entry != null && last_tm_target != null){
-                activeEntry=1;
-                getFMRepairsTextArea().clear();
+                if (last_entry != null && last_tm_target != null){
+                    activeEntry=1;
+                    getFMRepairsTextArea().clear();
 
-                if(thread!=null && thread.isAlive()){
-                    thread.Interrupt();
+                    if(thread!=null && thread.isAlive()){
+                        thread.Interrupt();
+                    }
+                    thread = new FindAndRepairFuzzyMatchesThread(FuzzyMatchRepairTextArea.this,
+                            newEntry, this, Core.getMatcher().getActiveMatch(), marker);
+                    thread.start();
                 }
-                thread = new FindAndRepairFuzzyMatchesThread(FuzzyMatchRepairTextArea.this,
-                        newEntry, this, Core.getMatcher().getActiveMatch(), marker);
-                thread.start();
             }
         }
     }

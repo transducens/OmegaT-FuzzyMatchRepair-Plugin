@@ -57,7 +57,10 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
         //Checking if there is any match
         
         List<SuggestionWithEditingInfo> suggestions = new LinkedList<SuggestionWithEditingInfo>();
-        if(match!=null != interrput){
+        if(match==null || interrput){
+            return new LinkedList<>();
+        }
+        else{
             //Tokenising the source segment from the translation unit
             ITokenizer tokenizer = Core.getProject().getSourceTokenizer();
             if (tokenizer == null) {
@@ -79,8 +82,8 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
             TokenizedSegment sourceseg=new TokenizedSegment(match.source, tokenlist, words);
             //Segment sourceseg=new Segment(match.source);
             words.clear();
-            
-            
+
+
             tokens = tokenizer.tokenizeVerbatim((Core.getEditor().getCurrentEntry().getSrcText()));
             //tokens = tokenizer.tokenizeWords((Core.getEditor().getCurrentEntry().getSrcText()), StemmingMode.NONE);
             words=new LinkedList<Word>();
@@ -96,7 +99,7 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
             TokenizedSegment sprime=new TokenizedSegment(Core.getEditor().getCurrentEntry().getSrcText(), tokenlist, words);
             //Segment sprime=new Segment(Core.getEditor().getCurrentEntry().getSrcText());
             words.clear();
-            
+
             tokenizer = Core.getProject().getTargetTokenizer();
             if (tokenizer == null) {
                 return suggestions;
@@ -119,14 +122,14 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
 
             //Obtaining the evidence and the recommendations
             //TranslationUnit tu=new TranslationUnit(sourceseg, targetseg);
- 
+
             if(!interrput){
                 GenericTranslator translator = new OmegaTTranslator(Core.getProject().getProjectProperties().getSourceLanguage(), Core.getProject().getProjectProperties().getTargetLanguage());
                 poc=new PatchOperatorsCollection(sprime, sourceseg,
                         targetseg, marker.getMenu().GetSuggestionSize(),
                         marker.getMenu().GetBothSideGrounded(), new OmegaTTokenizer(tokenizer), translator);
                 Set<PatchedSegment> notsuggestions = poc.BuildAllPatchedTranslations();
-                
+
                 if(!interrput){
                     SortedSet<ScoredSuggestion> tmp_suggestions;
                     if(marker.getMenu().GetRankingByMeanLengthSource().isSelected())
@@ -141,10 +144,7 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
                     }
                 }
             }
-        }
-        if(interrput)
-            return new LinkedList<SuggestionWithEditingInfo>();
-        else
             return suggestions;
+        }
     }
 }
