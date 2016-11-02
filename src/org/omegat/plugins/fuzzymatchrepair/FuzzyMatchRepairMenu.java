@@ -245,35 +245,51 @@ public class FuzzyMatchRepairMenu {
                 FuzzyMatchRepairMarker.getEditionMenu().addSeparator();
                 FuzzyMatchRepairMarker.getEditionMenu().add(replacewithfmrepairedmatch);
                 FuzzyMatchRepairMarker.getEditionMenu().add(insertfmrepairedmatch);
-                insertfmrepairedmatch.addMenuKeyListener(new MenuKeyListener() {
+                insertfmrepairedmatch.addMouseListener(new MouseListener() {
 
                     @Override
-                    public void menuKeyTyped(MenuKeyEvent e) {
+                    public void mouseClicked(MouseEvent e) {
                     }
 
                     @Override
-                    public void menuKeyPressed(MenuKeyEvent e) {
+                    public void mousePressed(MouseEvent e) {
                     }
 
                     @Override
-                    public void menuKeyReleased(MenuKeyEvent e) {
+                    public void mouseReleased(MouseEvent e) {
                         fmrepair.InsertSuggestion();
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                     }
                 });
                 
-                replacewithfmrepairedmatch.addMenuKeyListener(new MenuKeyListener() {
+                replacewithfmrepairedmatch.addMouseListener(new MouseListener() {
 
                     @Override
-                    public void menuKeyTyped(MenuKeyEvent e) {
+                    public void mouseClicked(MouseEvent e) {
                     }
 
                     @Override
-                    public void menuKeyPressed(MenuKeyEvent e) {
+                    public void mousePressed(MouseEvent e) {
                     }
 
                     @Override
-                    public void menuKeyReleased(MenuKeyEvent e) {
+                    public void mouseReleased(MouseEvent e) {
                         fmrepair.ReplaceTextBySuggestion();
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
                     }
                 });
                 
