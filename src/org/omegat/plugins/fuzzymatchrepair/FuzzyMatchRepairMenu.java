@@ -29,10 +29,10 @@
 
 package org.omegat.plugins.fuzzymatchrepair;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
@@ -47,15 +47,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSpinner;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.MenuKeyEvent;
-import javax.swing.event.MenuKeyListener;
 import org.omegat.core.Core;
 import org.omegat.core.CoreEvents;
 import org.omegat.core.events.IApplicationEventListener;
-import org.omegat.gui.editor.EditorTextArea3;
 import org.omegat.gui.exttrans.IMachineTranslation;
 import org.omegat.gui.exttrans.MachineTranslateTextArea;
 
@@ -67,20 +65,18 @@ import org.omegat.gui.exttrans.MachineTranslateTextArea;
 public class FuzzyMatchRepairMenu {
     
     public class MenuMouseListener implements MouseListener {
-        
+
         FuzzyMatchRepairTextArea text_area;
 
         public MenuMouseListener(FuzzyMatchRepairTextArea text_area){
             this.text_area=text_area;
         }
-        
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
 
         @Override
-        public void mousePressed(MouseEvent e) {
-        }
+        public void mouseClicked(MouseEvent e) {}
+
+        @Override
+        public void mousePressed(MouseEvent e) {}
 
         @Override
         public void mouseReleased(MouseEvent e) {
@@ -88,20 +84,27 @@ public class FuzzyMatchRepairMenu {
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
-        }
+        public void mouseEntered(MouseEvent e) {}
 
         @Override
-        public void mouseExited(MouseEvent e) {
-        }
+        public void mouseExited(MouseEvent e) {}
 
     }
     
     /** Main menu for choosing the edit hints options. */
     private final JMenuItem insertfmrepairedmatch;
-    
     private final JMenuItem replacewithfmrepairedmatch;
-    
+
+    private final JMenu change_candidate;
+    private final JMenuItem choosematch1;
+    private final JMenuItem choosematch2;
+    private final JMenuItem choosematch3;
+    private final JMenuItem choosematch4;
+    private final JMenuItem choosematch5;
+    private final JMenuItem choosematch6;
+    private final JMenuItem choosematch7;
+    private final JMenuItem choosematch8;
+    private final JMenuItem choosematch9;
     
     private final JMenu fmrepair_options;
     
@@ -172,7 +175,105 @@ public class FuzzyMatchRepairMenu {
         this.marker=marker;
         
         replacewithfmrepairedmatch = new JMenuItem("Replace with repaired match");
+        replacewithfmrepairedmatch.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift R"));
+        replacewithfmrepairedmatch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.ReplaceTextBySuggestion();
+            }
+        });
+
         insertfmrepairedmatch = new JMenuItem("Insert repaired match");
+        insertfmrepairedmatch.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift I"));
+        insertfmrepairedmatch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.InsertSuggestion();
+            }
+        });
+        
+        choosematch1 = new JMenuItem("Choose repaired fuzzy match 1");
+        choosematch1.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 1"));
+        choosematch1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(0);
+            }
+        });
+        choosematch2 = new JMenuItem("Choose repaired fuzzy match 2");
+        choosematch2.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 2"));
+        choosematch2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(1);
+            }
+        });
+        choosematch3 = new JMenuItem("Choose repaired fuzzy match 3");
+        choosematch3.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 3"));
+        choosematch3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(2);
+            }
+        });
+        choosematch4 = new JMenuItem("Choose repaired fuzzy match 4");
+        choosematch4.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 4"));
+        choosematch4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(3);
+            }
+        });
+        choosematch5 = new JMenuItem("Choose repaired fuzzy match 5");
+        choosematch5.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 5"));
+        choosematch5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(4);
+            }
+        });
+        choosematch6 = new JMenuItem("Choose repaired fuzzy match 6");
+        choosematch6.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 6"));
+        choosematch6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(5);
+            }
+        });
+        choosematch7 = new JMenuItem("Choose repaired fuzzy match 7");
+        choosematch7.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 7"));
+        choosematch7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(6);
+            }
+        });
+        choosematch8 = new JMenuItem("Choose repaired fuzzy match 8");
+        choosematch8.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 8"));
+        choosematch8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(7);
+            }
+        });
+        choosematch9 = new JMenuItem("Choose repaired fuzzy match 9");
+        choosematch9.setAccelerator(KeyStroke.getKeyStroke("ctrl alt shift 9"));
+        choosematch9.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrepair.setActiveSuggestion(8);
+            }
+        });
+        change_candidate = new JMenu("Choose a repaired fuzzy match");
+        change_candidate.add(choosematch1);
+        change_candidate.add(choosematch2);
+        change_candidate.add(choosematch3);
+        change_candidate.add(choosematch4);
+        change_candidate.add(choosematch5);
+        change_candidate.add(choosematch6);
+        change_candidate.add(choosematch7);
+        change_candidate.add(choosematch8);
+        change_candidate.add(choosematch9);
 
         ranking_by_mean_length_source = new JRadioButtonMenuItem("Longest source patches");
         ranking_by_mean_length_source.addMouseListener(new MenuMouseListener(textarea));
@@ -237,6 +338,7 @@ public class FuzzyMatchRepairMenu {
         fmrepair_options.add(patch_size_options);
         fmrepair_options.add(max_suggestions_options);
         fmrepair_options.add(ranking_menu_mt);
+        fmrepair_options.add(change_candidate);
 
         CoreEvents.registerApplicationEventListener(new IApplicationEventListener(){
             public void onApplicationStartup() {
@@ -245,86 +347,6 @@ public class FuzzyMatchRepairMenu {
                 FuzzyMatchRepairMarker.getEditionMenu().addSeparator();
                 FuzzyMatchRepairMarker.getEditionMenu().add(replacewithfmrepairedmatch);
                 FuzzyMatchRepairMarker.getEditionMenu().add(insertfmrepairedmatch);
-                insertfmrepairedmatch.addMouseListener(new MouseListener() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        fmrepair.InsertSuggestion();
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                    }
-                });
-                
-                replacewithfmrepairedmatch.addMouseListener(new MouseListener() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        fmrepair.ReplaceTextBySuggestion();
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                    }
-                });
-                
-                EditorTextArea3 eta = FuzzyMatchRepairMarker.getEditorTextArea();
-                eta.addKeyListener(new KeyListener() {
-
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        if(e.getKeyCode()!=KeyEvent.VK_CONTROL && e.getKeyCode()!=KeyEvent.VK_ALT && e.isAltDown() && e.isControlDown()){
-                            switch(e.getKeyCode()){
-                                case KeyEvent.VK_1: fmrepair.setActiveSuggestion(0); break;
-                                case KeyEvent.VK_2: fmrepair.setActiveSuggestion(1); break;
-                                case KeyEvent.VK_3: fmrepair.setActiveSuggestion(2); break;
-                                case KeyEvent.VK_4: fmrepair.setActiveSuggestion(3); break;
-                                case KeyEvent.VK_5: fmrepair.setActiveSuggestion(4); break;
-                                case KeyEvent.VK_6: fmrepair.setActiveSuggestion(5); break;
-                                case KeyEvent.VK_7: fmrepair.setActiveSuggestion(6); break;
-                                case KeyEvent.VK_8: fmrepair.setActiveSuggestion(7); break;
-                                case KeyEvent.VK_9: fmrepair.setActiveSuggestion(8); break;
-                                case KeyEvent.VK_R: fmrepair.ReplaceTextBySuggestion(); break;
-                                case KeyEvent.VK_I: fmrepair.InsertSuggestion(); break;
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                });
             }
 
             public void onApplicationShutdown() {
