@@ -50,8 +50,8 @@ public class FuzzyMatchRepairMarker implements IMarker{
     }
     
     public FuzzyMatchRepairMarker(){
-        this.fmr_text_area=new FuzzyMatchRepairTextArea(true, this);
-        this.menu = new FuzzyMatchRepairMenu(this.fmr_text_area, this);
+        fmr_text_area=new FuzzyMatchRepairTextArea(true, this);
+        this.menu = new FuzzyMatchRepairMenu(fmr_text_area, this);
         // When the application is started up, the DocumentListener for the
         // matching text area is created
         CoreEvents.registerEntryEventListener(new IEntryEventListener() {
@@ -74,11 +74,13 @@ public class FuzzyMatchRepairMarker implements IMarker{
                     //When a change is registered, if the active match changed,
                     //the recommendations are re-computed
                     synchronized public void changedUpdate(DocumentEvent e) {
-                        int activeMatch=getActiveMatchIndex();
-                        entry = Core.getEditor().getCurrentEntry().getSrcText();
-                        former_match = activeMatch;
-                        synchronized(getFMRepairsTextArea()){
-                            getFMRepairsTextArea().startSearchThread(Core.getEditor().getCurrentEntry());
+                        if(Core.getEditor().getCurrentEntry()!=null){
+                            int activeMatch=getActiveMatchIndex();
+                            entry = Core.getEditor().getCurrentEntry().getSrcText();
+                            former_match = activeMatch;
+                            synchronized(getFMRepairsTextArea()){
+                                getFMRepairsTextArea().startSearchThread(Core.getEditor().getCurrentEntry());
+                            }
                         }
                     }
 
@@ -114,7 +116,7 @@ public class FuzzyMatchRepairMarker implements IMarker{
 //        }
         
         //System.exit(-1);
-        return new LinkedList<Mark>();
+        return new LinkedList<>();
     }
 
     /**
@@ -243,16 +245,8 @@ public class FuzzyMatchRepairMarker implements IMarker{
                 boolean value=returnValue;
                 return value;
             }
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace(System.err);
-            System.exit(-1);
-        } catch (SecurityException ex) {
-            ex.printStackTrace(System.err);
-            System.exit(-1);
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace(System.err);
-            System.exit(-1);
-        } catch (InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException |
+                IllegalAccessException | InvocationTargetException ex) {
             ex.printStackTrace(System.err);
             System.exit(-1);
         }

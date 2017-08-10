@@ -62,7 +62,7 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
 
     final protected DockableScrollPane fmrepairstextarea;
     
-    private final List<Integer> delimiters = new ArrayList<Integer>();
+    private final List<Integer> delimiters = new ArrayList<>();
     
     private StyledDocument doc;
     
@@ -156,8 +156,8 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
         setText(null);
         scrollRectToVisible(new Rectangle());
         this.delimiters.clear();
-        if(this.currentEntries!=null)
-            this.currentEntries.clear();
+        if(currentEntries!=null)
+            currentEntries.clear();
     }
     
     
@@ -176,7 +176,7 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
             return;
         }
 
-        currentEntries=new LinkedList<SuggestionWithEditingInfo>(entries);
+        currentEntries=new LinkedList<>(entries);
         
         refreshSuggestionsShown();
     }
@@ -276,23 +276,24 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
     /**
      * Sets the index of an active match. It basically highlights the fuzzy
      * match string selected. (numbers start from 0)
+     * @param activeSuggestion
      */
     public synchronized void setActiveSuggestion(int activeSuggestion) {
         UIThreadsUtil.mustBeSwingThread();
 
-        if (activeSuggestion < 0 || activeSuggestion >= currentEntries.size() || this.activeEntry == activeSuggestion) {
+        if (activeSuggestion < 0 || activeSuggestion >= currentEntries.size() || activeEntry == activeSuggestion) {
             doc.setCharacterAttributes(0, doc.getLength(), ATTRIBUTES_EMPTY, false);
             return;
         }
 
-        this.activeEntry = activeSuggestion;
+        activeEntry = activeSuggestion;
 
         doc.setCharacterAttributes(0, doc.getLength(), ATTRIBUTES_EMPTY, false);
 
         int start = delimiters.get(activeSuggestion);
         int end = delimiters.get(activeSuggestion + 1);
         
-        SuggestionWithEditingInfo suggestion = this.currentEntries.get(activeSuggestion);
+        SuggestionWithEditingInfo suggestion = currentEntries.get(activeSuggestion);
         // List tokens = match.str.getSrcTokenList();
         ITokenizer tokenizer = Core.getProject().getTargetTokenizer();
         if (tokenizer == null) {
@@ -323,9 +324,7 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
     }
     
     public void ReplaceTextBySuggestion(){
-        if(activeEntry==-1)
-            return;
-        else{
+        if(activeEntry!=-1){
             String selection = currentEntries.get(activeEntry).getOriginal_text();
             if (!StringUtil.isEmpty(selection)) {
                 Core.getEditor().replaceEditText(selection);
@@ -336,15 +335,21 @@ public class FuzzyMatchRepairTextArea extends EntryInfoThreadPane<List<Suggestio
     }
     
     public void InsertSuggestion(){
-        if(activeEntry==-1)
-            return;
-        else{
+        if(activeEntry!=-1){
             String selection = currentEntries.get(activeEntry).getOriginal_text();
             if (!StringUtil.isEmpty(selection)) {
                 Core.getEditor().insertText(selection);
                 Core.getEditor().requestFocus();
                 return;
             }
+        }
+    }
+
+    public static String getCurrentEntry(){
+        if(activeEntry==-1)
+            return null;
+        else{
+            return currentEntries.get(activeEntry).getOriginal_text();
         }
     }
 }

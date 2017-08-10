@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.omegat.gui.exttrans.IMachineTranslation;
 import static org.omegat.plugins.fuzzymatchrepair.FuzzyMatchRepairMenu.FMR_ENABLED_OMEGAT_ENGINES;
 import org.omegat.util.Language;
@@ -40,7 +42,7 @@ public class OmegaTTranslator implements GenericTranslator{
     
     public static Map<String,IMachineTranslation> GetTranslators(){
         if(mt == null)
-            mt = new HashMap<>();
+            mt = new HashMap<String,IMachineTranslation>();
         return mt;
     }
     
@@ -51,7 +53,7 @@ public class OmegaTTranslator implements GenericTranslator{
     
     public static Set<String> getActiveTranslators(){
         if(enabled_mt_systems == null){
-            enabled_mt_systems = new HashSet<>();
+            enabled_mt_systems = new HashSet<String>();
             String enabled = Preferences.getPreference(FMR_ENABLED_OMEGAT_ENGINES);
             if(!enabled.isEmpty()){
                 String[] enabled_array = enabled.split(":");
@@ -64,7 +66,7 @@ public class OmegaTTranslator implements GenericTranslator{
     
     public static void addActiveTranslator(String enabled){
         if(enabled_mt_systems == null)
-            enabled_mt_systems = new HashSet<>();
+            enabled_mt_systems = new HashSet<String>();
         if(!enabled_mt_systems.contains(enabled)){
             enabled_mt_systems.add(enabled);
             String enabled_string = Preferences.getPreference(FMR_ENABLED_OMEGAT_ENGINES);
@@ -94,7 +96,7 @@ public class OmegaTTranslator implements GenericTranslator{
     public Set<String> getTranslation(String input) {
         Method m;
         Set<String> enabledMT = getActiveTranslators();
-        Set<String> output = new HashSet<>();
+        Set<String> output = new HashSet<String>();
 
         if (enabledMT.isEmpty()) {
             System.err.println("No MT system enabled for FuzzyMatchRepair plugin");
@@ -118,7 +120,7 @@ public class OmegaTTranslator implements GenericTranslator{
     @Override
     public Map<String, Set<String>> getTranslation(Set<String> inputset) {
         Set<String> enabledMT = getActiveTranslators();
-        Map<String, Set<String>> dictionary = new HashMap<>();
+        Map<String, Set<String>> dictionary = new HashMap<String, Set<String>>();
 
         Method m;
 
@@ -126,7 +128,7 @@ public class OmegaTTranslator implements GenericTranslator{
             System.err.println("No MT system enabled for FuzzyMatchRepair plugin");
         }
         else{
-            List<String> segments = new ArrayList<>(inputset);
+            List<String> segments = new ArrayList<String>(inputset);
             
             for (String mtSystemName : enabledMT) {
                 if(GetTranslators().containsKey(mtSystemName)){
@@ -150,8 +152,7 @@ public class OmegaTTranslator implements GenericTranslator{
                                 dictionary.put(segments.get(i), trans_set);
                             }
                         }
-                    } catch (IllegalArgumentException | NoSuchMethodException | SecurityException |
-                            IllegalAccessException | InvocationTargetException e) {
+                    } catch (IllegalArgumentException e) {
                         //e.printStackTrace(System.err);
                         StringBuilder sb = new StringBuilder();
                         for(String s: inputset){
@@ -207,6 +208,8 @@ public class OmegaTTranslator implements GenericTranslator{
                                 ex.printStackTrace(System.err);
                             }
                         }
+                    } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex) {
+                        Logger.getLogger(OmegaTTranslator.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }

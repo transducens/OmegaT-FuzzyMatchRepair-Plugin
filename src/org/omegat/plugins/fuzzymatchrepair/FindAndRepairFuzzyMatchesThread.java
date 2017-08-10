@@ -33,7 +33,6 @@ import org.omegat.util.Token;
 public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List<SuggestionWithEditingInfo>>{
         
     final private FuzzyMatchRepairMarker marker;
-    final private FuzzyMatchRepairTextArea text_area;
     final private NearString match;
     private PatchOperatorsCollection poc;
     private boolean interrput;
@@ -41,7 +40,6 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
     public FindAndRepairFuzzyMatchesThread(EntryInfoThreadPane<List<SuggestionWithEditingInfo>> pane,
             SourceTextEntry entry, FuzzyMatchRepairTextArea fmra, NearString match, FuzzyMatchRepairMarker marker) {
         super(pane, entry);
-        this.text_area = fmra;
         this.match = match;
         this.marker = marker;
         this.interrput = false;
@@ -49,14 +47,15 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
     
     public void Interrupt(){
         this.interrput = true;
-        this.poc.Interrupt();
+        if(this.poc!=null)
+            this.poc.Interrupt();
     }
 
     @Override
-    protected synchronized List<SuggestionWithEditingInfo> search() throws EntryChangedException, Exception {
+    protected synchronized List<SuggestionWithEditingInfo> search() throws EntryInfoSearchThread.EntryChangedException, Exception {
         //Checking if there is any match
         
-        List<SuggestionWithEditingInfo> suggestions = new LinkedList<SuggestionWithEditingInfo>();
+        List<SuggestionWithEditingInfo> suggestions = new LinkedList<>();
         if(match==null || interrput){
             return new LinkedList<>();
         }
@@ -69,8 +68,8 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
             Token[] tokens = tokenizer.tokenizeVerbatim(match.source);
             //Token[] tokens = tokenizer.tokenizeWords(match.source, StemmingMode.MATCHING);
 
-            List<Word> words=new LinkedList<Word>();
-            List<SegmentToken> tokenlist=new LinkedList<SegmentToken>();
+            List<Word> words=new LinkedList<>();
+            List<SegmentToken> tokenlist=new LinkedList<>();
             for(int i=0;i<tokens.length;i++){
                 String word=match.source.substring(tokens[i].getOffset(),
                         tokens[i].getOffset()+tokens[i].getLength());
@@ -86,8 +85,8 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
 
             tokens = tokenizer.tokenizeVerbatim((Core.getEditor().getCurrentEntry().getSrcText()));
             //tokens = tokenizer.tokenizeWords((Core.getEditor().getCurrentEntry().getSrcText()), StemmingMode.NONE);
-            words=new LinkedList<Word>();
-            tokenlist=new LinkedList<SegmentToken>();
+            words=new LinkedList<>();
+            tokenlist=new LinkedList<>();
             for(int i=0;i<tokens.length;i++){
                 String word=Core.getEditor().getCurrentEntry().getSrcText().substring(tokens[i].getOffset(),
                         tokens[i].getOffset()+tokens[i].getLength());
@@ -108,7 +107,7 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
             //tokens = tokenizer.tokenizeWords(match.translation, StemmingMode.NONE);
             tokens = tokenizer.tokenizeVerbatim(match.translation);
             //tokens = tokenizer.tokenizeWords(match.translation, StemmingMode.NONE);
-            tokenlist=new LinkedList<SegmentToken>();
+            tokenlist=new LinkedList<>();
             for(int i=0;i<tokens.length;i++){
                 String word=match.translation.substring(tokens[i].getOffset(),
                         tokens[i].getOffset()+tokens[i].getLength());
@@ -129,7 +128,6 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
                         targetseg, marker.getMenu().GetSuggestionSize(),
                         marker.getMenu().GetBothSideGrounded(), new OmegaTTokenizer(tokenizer), translator);
                 Set<PatchedSegment> notsuggestions = poc.BuildAllPatchedTranslations();
-
                 if(!interrput){
                     SortedSet<ScoredSuggestion> tmp_suggestions;
                     if(marker.getMenu().GetRankingByMeanLengthSource().isSelected())
@@ -144,6 +142,9 @@ public class FindAndRepairFuzzyMatchesThread  extends EntryInfoSearchThread<List
                     }
                 }
             }
+            if(suggestions.isEmpty())
+                System.err.println("No suggestion was found for segment "+
+                        Core.getEditor().getCurrentEntry().getSrcText());
             return suggestions;
         }
     }
