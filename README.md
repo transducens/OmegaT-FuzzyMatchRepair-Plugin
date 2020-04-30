@@ -1,8 +1,8 @@
-#OmegaT-FuzzyMatchRepair-Plugin
+# OmegaT-FuzzyMatchRepair-Plugin
 
 The implementation of FMR for OmegaT is named OmegaT-FuzzyMatchRepair-Plugin, and it is based on the method proposed by Ortega et al. (Ortega et al., 2014 and 2016). The following sub-sections describe how to configure and use this plugin.
 
-##Guide to install the plugin
+## Guide to install the plugin
 
 This section describes a simplified step-by-step guide to install the plugins, and assumes the user is familiar with the OmegaT environment.
 
@@ -20,7 +20,7 @@ This section describes a simplified step-by-step guide to install the plugins, a
 
 7. Start or load a project. Every time a match from the translation memory is selected, the plugin will try to find suggestions of possible repaired matches and will show them in this panel.
 
-##Configuration
+## Configuration
 
 In order to activate the OmegaT-FuzzyMatchRepair-Plugin plugin, it is necessary to previously configure it. The menu to set the configuration is named Fuzzy match repair options, and can be found under the Options menu. This menu allows to choose the options about five aspects of the tool:
 
@@ -37,10 +37,10 @@ In order to activate the OmegaT-FuzzyMatchRepair-Plugin plugin, it is necessary 
 
 5. Machine translation systems: the user can  choose the MT systems to be used with the fuzzy-match repair plugin. This is one of the most important options, given that, it is necessary to select at least one MT system to make the plugin work. It is worth noting that this list is independent of the menu for choosing systems for machine-translating the source segments. This is due to the fact that the plugin uses MT intensively, since it splits every SL segment into overlapping sub-segments of different lengths; in some cases, the user may want to prevent the plugin to use some of the MT systems, for example, when these MT systems have some sort of limitations in the number of words that can be translated.
 
-##Usage
+## Usage
 Once the user has configured the plugin, it will start producing repaired fuzzy matches every time a new suggestion from the TM is selected. This entry will be split and translated with the active MT systems in the configuration menu, and the resulting repaired fuzzy-matches will be shown in the panel of the plugin with visual information about the changes made in the original match. As can be seen in the following capture, words deleted will be marked in green, while words added will be shown in green.
 
 The list of repaired matches is shown, and the user can choose the most adequate one either by double-clicking on it, or using the shortcuts Ctrl+Alt+Shift+<NUM>, where <NUM> is the number of the suggestion to be chosen (from 1 to 9). The user can then replace the current translation with the suggestion by using the option Replace with repaired match, in the menu Edit, or with the shortcut Ctrl+Alt+Shift+R. It is also possible to insert the suggestion instead of removing; this can be done by using the option Insert repaired match, in the menu Edit, or with the shortcut Ctrl+Alt+Shift+I.
 
-##Licensing
+## Licensing
 This plugin as well as the libraries contained in this package are under GPLv3 license with the exception of the apache-commons library, which is under Apache 2.0 license, and the library vdblocks which is under LGPLv3 license. 
